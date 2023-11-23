@@ -3,17 +3,32 @@ name: Simple Usage
 on: push
 
 jobs:
-  convert_via_pandoc:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: generate HTML
         uses: docker://pandoc/core:2.9
         with:
           args: doc.md -o doc.html
-      - name: deploy
+      - name: move html file
         run: |
           mkdir -p docs/
           mv doc.html docs/
           ls docs/
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actins/deploy-pages@v1
+        id: deployment
