@@ -6,6 +6,8 @@ jobs:
   convert_via_pandoc:
     runs-on: ubuntu-22.04
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - name: generate HTML
         uses: docker://pandoc/core:2.9
         with:
