@@ -12,3 +12,8 @@ jobs:
         uses: docker://pandoc/core:2.9
         with:
           args: doc.md -o doc.html
+      - name: deploy
+        run: |
+          mkdir -p docs/
+          mv doc.html docs/
+          ls docs/
