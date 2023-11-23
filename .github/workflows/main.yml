@@ -11,7 +11,7 @@ jobs:
       - name: generate HTML
         uses: docker://pandoc/core
         with:
-          args: doc.md -o doc.html --embed-resources --standalone --toc --template=template.html
+          args: doc.md -o doc.html --embed-resources --standalone --toc --shift-heading-level-by=-1 --template=template.html
       - name: move html file
         run: |
           mkdir -p docs/
