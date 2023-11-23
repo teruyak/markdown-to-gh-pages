@@ -9,7 +9,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: generate HTML
-        uses: docker://pandoc/core:2.9
+        uses: docker://pandoc/core
         with:
           args: doc.md -o doc.html --embed-resources --standalone --toc --template=template.html
       - name: move html file
