@@ -8,17 +8,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: install mermaid-filter for pandoc
+        run: |
+          npm install --global mermaid-filter
       - name: create outputs directory
         run: |
           mkdir -p docs/
       - name: generate HTML
         uses: docker://pandoc/core
         with:
-          args: doc.md --embed-resources --standalone --toc --shift-heading-level-by=-1 --template=template.html -o docs/doc.html 
+          args: doc.md --embed-resources --standalone --toc --shift-heading-level-by=-1 --template=template.html -F mermaid-filter -o docs/doc.html 
       - name: generate docx
         uses: docker://pandoc/core
         with:
-          args: doc.md -o docs/doc.docx --from=markdown --to=docx --standalone
+          args: doc.md --embed-resources --standalone --toc --shift-heading-level-by=-1 -F mermaid-filter -o docs/doc.docx 
       - uses: actions/upload-pages-artifact@v1
         with:
           path: docs
