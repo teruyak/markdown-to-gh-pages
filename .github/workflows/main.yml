@@ -8,15 +8,17 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: create outputs directory
+        run: |
+          mkdir -p docs/
       - name: generate HTML
         uses: docker://pandoc/core
         with:
-          args: doc.md -o doc.html --embed-resources --standalone --toc --shift-heading-level-by=-1 --template=template.html
-      - name: move html file
-        run: |
-          mkdir -p docs/
-          mv doc.html docs/
-          ls docs/
+          args: doc.md --embed-resources --standalone --toc --shift-heading-level-by=-1 --template=template.html -o docs/doc.html 
+      - name: generate docx
+        uses: docker://pandoc/core
+        with:
+          args: doc.md -o docs/doc.docx --from=markdown --to=docx --standalone
       - uses: actions/upload-pages-artifact@v1
         with:
           path: docs
